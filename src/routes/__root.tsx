@@ -10,7 +10,15 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
+import { motion } from "framer-motion";
+import { useRouterState } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
+import { Navbar } from "@/components/site/Navbar";
+import { Footer } from "@/components/site/Footer";
+import { WhatsAppButton } from "@/components/site/WhatsApp";
+import { Preloader } from "@/components/site/Preloader";
+import { CustomCursor } from "@/components/site/Cursor";
+import { SmoothScroll } from "@/components/site/SmoothScroll";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -81,21 +89,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "ELWOURA — Digital Marketing Agency" },
+      { name: "description", content: "ELWOURA is a modern digital marketing agency. Where Ideas Become Impact." },
+      { name: "author", content: "ELWOURA" },
+      { property: "og:title", content: "ELWOURA — Digital Marketing Agency" },
+      { property: "og:description", content: "Where Ideas Become Impact." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700;800&display=swap" },
     ],
   }),
   shellComponent: RootShell,
@@ -124,7 +134,29 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <SmoothScroll />
+      <Preloader />
+      <CustomCursor />
+      <Navbar />
+      <PageTransition />
+      <Footer />
+      <WhatsAppButton />
     </QueryClientProvider>
+  );
+}
+
+function PageTransition() {
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  useEffect(() => { window.scrollTo(0, 0); }, [path]);
+  return (
+    <div key={path}>
+      <motion.div
+        initial={{ scaleY: 1 }} animate={{ scaleY: 0 }} transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+        style={{ originY: 0 }} className="section-teal pointer-events-none fixed inset-0 z-[90]"
+      />
+      <motion.main initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.25 }}>
+        <Outlet />
+      </motion.main>
+    </div>
   );
 }
