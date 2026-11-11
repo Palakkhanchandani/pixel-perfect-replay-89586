@@ -178,7 +178,7 @@ function Process() {
 function Testimonials() {
   const [i, setI] = useState(0);
   useEffect(() => { const t = setInterval(() => setI((v) => (v + 1) % TESTIMONIALS.length), 6000); return () => clearInterval(t); }, []);
-  const t = TESTIMONIALS[i];
+  const t = TESTIMONIALS[i] ?? TESTIMONIALS[0]!;
   return (
     <section className="section-light py-28 md:py-40">
       <div className="container-x max-w-5xl text-center">

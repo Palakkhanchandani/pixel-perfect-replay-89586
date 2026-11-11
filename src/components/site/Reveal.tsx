@@ -13,7 +13,7 @@ export function SplitText({ text, as: Tag = "h2", className, delay = 0, onScroll
     const words = ref.current.querySelectorAll(".w > span");
     const ctx = gsap.context(() => {
       gsap.from(words, { yPercent: 110, rotate: 4, duration: 1.1, ease: "expo.out", stagger: 0.06, delay,
-        scrollTrigger: onScroll ? { trigger: ref.current, start: "top 85%" } : undefined });
+        ...(onScroll ? { scrollTrigger: { trigger: ref.current, start: "top 85%" } } : {}) });
     });
     return () => ctx.revert();
   }, [delay, onScroll]);
